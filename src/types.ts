@@ -12,7 +12,8 @@ export type View =
   | 'record-payment' 
   | 'new-client' 
   | 'client-detail' 
-  | 'new-invoice';
+  | 'new-invoice'
+  | 'readme';
 
 export interface PageProps {
   navigateTo: (view: View, id?: string) => void;

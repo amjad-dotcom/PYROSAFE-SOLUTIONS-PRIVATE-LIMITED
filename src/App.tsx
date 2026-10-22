@@ -24,7 +24,8 @@ import {
   Database,
   LogOut,
   ShieldCheck,
-  Lock
+  Lock,
+  BookOpen
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from './lib/utils';
@@ -43,6 +44,7 @@ import ClientDetail from './pages/ClientDetail';
 import NewInvoice from './pages/NewInvoice';
 import Inventory from './pages/Inventory';
 import HR from './pages/HR';
+import Readme from './pages/Readme';
 import Login from './pages/Login';
 import { authService, AuthUser } from './services/authService';
 import { invoiceService, MongoDbStatus } from './services/invoiceService';
@@ -93,6 +95,7 @@ export default function App() {
     { id: 'inventory', label: 'Inventory & Stock', icon: Boxes },
     { id: 'hr', label: 'HR & Team', icon: UserCheck },
     { id: 'settings', label: 'Settings', icon: SettingsIcon },
+    { id: 'readme', label: 'System README', icon: BookOpen },
   ];
 
   if (isAuthChecking) {
@@ -234,6 +237,7 @@ export default function App() {
                currentView === 'inventory' ? 'Inventory & Stock Hub' :
                currentView === 'hr' ? 'Human Resources & Team' :
                currentView === 'invoices' ? 'Tax Invoices (MongoDB)' :
+               currentView === 'readme' ? 'System README & Docs' :
                currentView.replace('-', ' ')}
             </h1>
 
@@ -293,6 +297,7 @@ export default function App() {
               {currentView === 'new-client' && <NewClient navigateTo={navigateTo} />}
               {currentView === 'client-detail' && <ClientDetail clientId={selectedClientId!} navigateTo={navigateTo} />}
               {currentView === 'new-invoice' && <NewInvoice navigateTo={navigateTo} />}
+              {currentView === 'readme' && <Readme navigateTo={navigateTo} />}
             </motion.div>
           </AnimatePresence>
         </div>
