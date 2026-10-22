@@ -1,0 +1,116 @@
+{
+  "entities": {
+    "Client": {
+      "title": "Client",
+      "description": "Represents a customer or client organization.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "companyName": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "website": { "type": "string" },
+        "industry": { "type": "string" },
+        "gstin": { "type": "string" },
+        "state": { "type": "string" },
+        "address": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "companyName", "email", "state"]
+    },
+    "Vendor": {
+      "title": "Vendor",
+      "description": "Represents a supplier or vendor.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "gstin": { "type": "string" },
+        "state": { "type": "string" },
+        "address": { "type": "string" }
+      },
+      "required": ["name", "email", "state"]
+    },
+    "Lead": {
+      "title": "Lead",
+      "description": "A potential sales opportunity.",
+      "type": "object",
+      "properties": {
+        "clientId": { "type": "string" },
+        "status": { "type": "string", "enum": ["Lead", "Qualified", "Proposal", "Negotiation", "Closed Won", "Closed Lost"] },
+        "value": { "type": "number" },
+        "source": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Task": {
+      "title": "Task",
+      "description": "A CRM task or follow-up.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "dueDate": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["Pending", "Completed"] },
+        "priority": { "type": "string", "enum": ["Low", "Medium", "High"] },
+        "clientId": { "type": "string" },
+        "ownerId": { "type": "string" }
+      }
+    },
+    "LineItem": {
+      "title": "Line Item",
+      "description": "A product or service line item in an invoice or quote.",
+      "type": "object",
+      "properties": {
+        "description": { "type": "string" },
+        "hsn": { "type": "string" },
+        "qty": { "type": "number" },
+        "rate": { "type": "number" },
+        "taxRate": { "type": "number" }
+      }
+    },
+    "Invoice": {
+      "title": "Invoice",
+      "description": "A tax invoice or proforma invoice.",
+      "type": "object",
+      "properties": {
+        "clientId": { "type": "string" },
+        "number": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "items": { "type": "array", "items": { "$ref": "LineItem" } },
+        "isProforma": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["Draft", "Sent", "Paid", "Overdue", "Cancelled"] },
+        "subtotal": { "type": "number" },
+        "cgst": { "type": "number" },
+        "sgst": { "type": "number" },
+        "igst": { "type": "number" },
+        "total": { "type": "number" },
+        "currency": { "type": "string", "default": "INR" }
+      }
+    },
+    "PurchaseOrder": {
+      "title": "Purchase Order",
+      "description": "A purchase order for a vendor.",
+      "type": "object",
+      "properties": {
+        "vendorId": { "type": "string" },
+        "number": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "items": { "type": "array", "items": { "$ref": "LineItem" } },
+        "status": { "type": "string", "enum": ["Draft", "Sent", "Partially Received", "Completed"] },
+        "total": { "type": "number" }
+      }
+    }
+  },
+  "firestore": {
+    "clients": { "schema": "Client", "description": "Collection of clients." },
+    "vendors": { "schema": "Vendor", "description": "Collection of vendors." },
+    "leads": { "schema": "Lead", "description": "Collection of leads." },
+    "tasks": { "schema": "Task", "description": "Collection of tasks." },
+    "invoices": { "schema": "Invoice", "description": "Collection of invoices/quotes." },
+    "purchaseOrders": { "schema": "PurchaseOrder", "description": "Collection of purchase orders." }
+  }
+}

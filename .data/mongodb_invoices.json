@@ -1,0 +1,104 @@
+[
+  {
+    "clientName": "Industrial Steel Works",
+    "number": "INV-2024-099",
+    "items": [],
+    "total": 25000,
+    "status": "Paid",
+    "id": "inv-doc-1792650666346",
+    "createdAt": "2026-10-22T06:31:06.346Z"
+  },
+  {
+    "id": "inv-doc-1",
+    "clientId": "1",
+    "clientName": "Acme Solutions",
+    "number": "INV-2024-082",
+    "date": "2024-10-20",
+    "items": [
+      {
+        "itemId": "inv-1",
+        "sku": "PYRO-FE-ABC-6KG",
+        "description": "ABC Powder Fire Extinguisher 6kg (IS:15683)",
+        "hsn": "8424",
+        "qty": 4,
+        "rate": 2350,
+        "taxRate": 18
+      },
+      {
+        "itemId": "inv-4",
+        "sku": "PYRO-SD-OPT-01",
+        "description": "Addressable Optical Smoke Detector with Standard Base",
+        "hsn": "8531",
+        "qty": 20,
+        "rate": 1450,
+        "taxRate": 18
+      }
+    ],
+    "isProforma": false,
+    "status": "Paid",
+    "subtotal": 38400,
+    "cgst": 3456,
+    "sgst": 3456,
+    "igst": 0,
+    "total": 45312,
+    "currency": "INR",
+    "deductedFromInventory": true,
+    "createdAt": "2024-10-20T00:00:00.000Z"
+  },
+  {
+    "id": "inv-doc-2",
+    "clientId": "2",
+    "clientName": "NextWave Creative",
+    "number": "INV-2024-079",
+    "date": "2024-10-15",
+    "items": [
+      {
+        "itemId": "inv-6",
+        "sku": "PYRO-FHR-30M",
+        "description": "Hydrant Fire Hose Reel Drum 30m with 19mm Thermoplastic Hose",
+        "hsn": "8424",
+        "qty": 2,
+        "rate": 6800,
+        "taxRate": 18
+      }
+    ],
+    "isProforma": false,
+    "status": "Overdue",
+    "subtotal": 13600,
+    "cgst": 0,
+    "sgst": 0,
+    "igst": 2448,
+    "total": 16048,
+    "currency": "INR",
+    "deductedFromInventory": true,
+    "createdAt": "2024-10-15T00:00:00.000Z"
+  },
+  {
+    "id": "inv-doc-3",
+    "clientId": "3",
+    "clientName": "Global Tech Ltd",
+    "number": "INV-2024-081",
+    "date": "2024-10-18",
+    "items": [
+      {
+        "itemId": "inv-10",
+        "sku": "PYRO-SRV-REFILL-ABC",
+        "description": "Extinguisher Refilling & Hydrostatic Pressure Testing (ABC 6kg)",
+        "hsn": "9987",
+        "qty": 15,
+        "rate": 750,
+        "taxRate": 18
+      }
+    ],
+    "isProforma": false,
+    "status": "Sent",
+    "subtotal": 11250,
+    "cgst": 1012.5,
+    "sgst": 1012.5,
+    "igst": 0,
+    "total": 13275,
+    "currency": "INR",
+    "deductedFromInventory": false,
+    "createdAt": "2024-10-18T00:00:00.000Z"
+  }
+]

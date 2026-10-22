@@ -1,0 +1,98 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // -------------------------------------------------------------------------
+    // GLOBAL HELPERS
+    // -------------------------------------------------------------------------
+    function isSignedIn() { return request.auth != null; }
+    function isVerified() { return isSignedIn() && request.auth.token.email_verified == true; }
+    function isAdmin() { return isVerified() && request.auth.token.email == "amjad@millenniumfireservice.com"; }
+    function isOwner(data) { return isSignedIn() && data.ownerId == request.auth.uid; }
+    
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    
+    function isValidTimestamp(val) { return val is timestamp && val <= request.time; }
+
+    // -------------------------------------------------------------------------
+    // ENTITY VALIDATION HELPERS
+    // -------------------------------------------------------------------------
+    
+    function isValidClient(data) {
+      return data.keys().hasAll(['name', 'companyName', 'email', 'state'])
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 200
+        && data.companyName is string && data.companyName.size() <= 200
+        && data.email is string && data.email.size() <= 100
+        && data.state is string && data.state.size() <= 50;
+    }
+
+    function isValidInvoice(data) {
+      return data.keys().hasAll(['clientId', 'number', 'date', 'items', 'total'])
+        && isValidId(data.clientId)
+        && data.number is string && data.number.size() <= 50
+        && data.items is list && data.items.size() <= 50
+        && data.total is number && data.total >= 0;
+    }
+
+    function isValidTask(data) {
+      return data.keys().hasAll(['title', 'status', 'ownerId'])
+        && data.title is string && data.title.size() <= 200
+        && data.status in ['Pending', 'Completed']
+        && data.ownerId == request.auth.uid;
+    }
+
+    // -------------------------------------------------------------------------
+    // DEFAULT DENY
+    // -------------------------------------------------------------------------
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // -------------------------------------------------------------------------
+    // COLLECTIONS
+    // -------------------------------------------------------------------------
+
+    match /clients/{clientId} {
+      allow read: if isVerified();
+      allow create: if isVerified() && isValidClient(incoming()) && isValidId(clientId);
+      allow update: if isVerified() && isValidClient(incoming()) 
+        && incoming().diff(existing()).affectedKeys().hasOnly(['name', 'email', 'phone', 'website', 'industry', 'gstin', 'state', 'address', 'updatedAt']);
+      allow delete: if isAdmin();
+    }
+
+    match /vendors/{vendorId} {
+      allow read: if isVerified();
+      allow create: if isVerified() && isValidId(vendorId);
+      allow update, delete: if isAdmin();
+    }
+
+    match /leads/{leadId} {
+      allow read: if isVerified();
+      allow create: if isVerified() && isValidId(leadId);
+      allow update: if isVerified();
+      allow delete: if isAdmin();
+    }
+
+    match /tasks/{taskId} {
+      allow read: if isVerified() && (isOwner(existing()) || isAdmin());
+      allow create: if isVerified() && isValidTask(incoming()) && isValidId(taskId);
+      allow update: if isVerified() && (isOwner(existing()) || isAdmin()) && isValidTask(incoming());
+      allow delete: if isVerified() && (isOwner(existing()) || isAdmin());
+    }
+
+    match /invoices/{invoiceId} {
+      allow read: if isVerified();
+      allow create: if isVerified() && isValidInvoice(incoming()) && isValidId(invoiceId);
+      allow update: if isVerified() && (existing().status == 'Draft' || isAdmin()) && isValidInvoice(incoming());
+      allow delete: if isAdmin();
+    }
+
+    match /purchaseOrders/{poId} {
+      allow read: if isVerified();
+      allow create: if isVerified() && isValidId(poId);
+      allow update: if isVerified() && (existing().status == 'Draft' || isAdmin());
+      allow delete: if isAdmin();
+    }
+  }
+}
